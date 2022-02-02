@@ -10,6 +10,7 @@ import src.board.Board;
 public class BoardGUIHandler {  
     JFrame f;
     final JPanel gui = new JPanel();
+    private JPanel piecePicker = new JPanel();
     private JPanel gygesBoard;
     private JPanel topLine;
     private JPanel bottomLine;
@@ -53,8 +54,18 @@ public class BoardGUIHandler {
         f.pack();
         // ensures the minimum size is enforced.
         f.setMinimumSize(f.getSize());
-        f.setResizable(false);
+        f.setResizable(true);
         f.setVisible(true);
+    }
+
+    public void displayPiecePicker() {
+        this.piecePicker.setBorder(new EmptyBorder(0, 0, 0, 0));
+        this.piecePicker.add(new CellGUIHandler());
+        gui.add(this.piecePicker);
+    }
+
+    public void hidePiecePicker() {
+        gui.remove(this.piecePicker);
     }
         
     public final JComponent getGui() {
