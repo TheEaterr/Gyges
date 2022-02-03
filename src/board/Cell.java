@@ -2,6 +2,7 @@ package src.board;
 
 import java.util.ArrayList;
 
+import src.game.Game;
 import src.game.Move;
 import src.gui.CellGUIHandler;
 import src.piece.*;
@@ -116,23 +117,29 @@ public class Cell {
     }
 
     public void triggerActivation() {
-        Move currentMove = this.parentBoard.getMove();
-        int moveState = currentMove.getState();
-        switch(moveState) {
-            case Move.startCellSelection:
-                this.parentBoard.selectMoveStartCell(this);
-                break;
-            case Move.startCellSelected:
-                if (this.parentBoard.selectedCell == this) {
-                    this.parentBoard.removeMoveStartCell();
-                }
-                else {
+        int gameState = this.parentBoard.getGame().getState();
+        if (gameState == Game.gameStarted) {
+            Move currentMove = this.parentBoard.getMove();
+            int moveState = currentMove.getState();
+            switch(moveState) {
+                case Move.startCellSelection:
+                    this.parentBoard.selectMoveStartCell(this);
+                    break;
+                case Move.startCellSelected:
+                    if (this.parentBoard.selectedCell == this) {
+                        this.parentBoard.removeMoveStartCell();
+                    }
+                    else {
+                        this.parentBoard.movePiece(this);
+                    }
+                    break;
+                case Move.pieceBouncing:
                     this.parentBoard.movePiece(this);
-                }
-                break;
-            case Move.pieceBouncing:
-                this.parentBoard.movePiece(this);
-                break;
+                    break;
+            }
+        }
+        else {
+            this.parentBoard.pickCell(this);
         }
     }
 

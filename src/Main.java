@@ -21,7 +21,7 @@ class Main {
       secondPlayerPieces.add(Piece.createNewWithNumber(pieceNumber));
     }
 
-    board.placePieces(firstPlayerPieces, secondPlayerPieces);
+    // board.placePieces(firstPlayerPieces, secondPlayerPieces);
 
   }
 }
