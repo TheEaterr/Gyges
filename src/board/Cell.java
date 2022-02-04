@@ -8,87 +8,85 @@ import src.gui.CellGUIHandler;
 import src.piece.*;
 
 public class Cell {
-    int line;
-    int column;
-    Piece pieceOnCell;
-    Piece pieceOvertopCell;
-    CellGUIHandler cellGUIHandler;
-    Board parentBoard;
-    public boolean isHighlighted;
+    final private int line;
+    final private int column;
+    private Piece pieceOnCell;
+    private Piece pieceOvertopCell;
+    final private CellGUIHandler cellGUIHandler;
+    final private Board parentBoard;
 
     public Cell(int line, int column, Board parentBoard) {
         this.line = line;
         this.column = column;
         this.parentBoard = parentBoard;
-        this.isHighlighted = false;
 
-        this.cellGUIHandler = new CellGUIHandler();
-        this.cellGUIHandler.setCell(this);
+        cellGUIHandler = new CellGUIHandler();
+        cellGUIHandler.setCell(this);
     }
 
     public CellGUIHandler getCellGUIHandler() {
-        return this.cellGUIHandler;
+        return cellGUIHandler;
     }
 
     public Piece getPieceOvertop() {
-        return this.pieceOvertopCell;
+        return pieceOvertopCell;
     }
 
     public Piece getPiece() {
-        return this.pieceOnCell;
+        return pieceOnCell;
     }
 
-    public Piece getPieceOnTopOfCell() {
+    public Piece getPieceOnTop() {
         if (this.pieceOvertopCell != null) {
-            return this.pieceOvertopCell;
+            return pieceOvertopCell;
         }
         else {
-            return this.pieceOnCell;
+            return pieceOnCell;
         }
     }
 
     private void setPiece(Piece piece) {
-        this.pieceOnCell = piece;
-        this.cellGUIHandler.setPieceOnCell(piece);
+        pieceOnCell = piece;
+        cellGUIHandler.setPieceOnCell(piece);
     }
 
     private void removePiece() {
-        this.pieceOnCell = null;
-        this.cellGUIHandler.removePiece();
+        pieceOnCell = null;
+        cellGUIHandler.removePiece();
     }
 
-    private void setPieceOvertopCell(Piece piece) {
-        this.cellGUIHandler.setPieceOvertopCell(piece);
-        this.pieceOvertopCell = piece;
+    private void setPieceOvertop(Piece piece) {
+        cellGUIHandler.setPieceOvertopCell(piece);
+        pieceOvertopCell = piece;
     }
 
-    private void removePieceOvertopCell() {
-        this.pieceOvertopCell = null;
-        this.cellGUIHandler.removePieceOvertopCell();
+    private void removePieceOvertop() {
+        pieceOvertopCell = null;
+        cellGUIHandler.removePieceOvertopCell();
     }
 
-    public void removePieceOnTopOfCell() {
-        if (this.pieceOvertopCell != null) {
-            removePieceOvertopCell();
+    public void removePieceOnTop() {
+        if (pieceOvertopCell != null) {
+            removePieceOvertop();
         }
-        else if (this.pieceOnCell != null) {
+        else if (pieceOnCell != null) {
             removePiece();
         }
     }
 
-    public boolean setPieceOnTopOfCell(Piece piece) {
-        if (this.pieceOnCell == null) {
+    public boolean setPieceOnTop(Piece piece) {
+        if (pieceOnCell == null) {
             setPiece(piece);
             return false;
         }
         else {
-            setPieceOvertopCell(piece);
+            setPieceOvertop(piece);
             return true;
         }
     }
 
     public int getNumber() {
-        if (this.pieceOnCell == null) {
+        if (pieceOnCell == null) {
             return 0;
         }
         else {
@@ -96,73 +94,73 @@ public class Cell {
         }
     }
 
+    public Board getParentBoard() {
+        return parentBoard;
+    }
+
     public void highlight() {
-        this.enableButton();
-        this.isHighlighted = true;
-        this.cellGUIHandler.highlight();
+        enableButton();
+        cellGUIHandler.highlight();
     }
 
     public void removeHighlight() {
-        this.disableButton();
-        this.cellGUIHandler.removeHighlight();
-        this.isHighlighted = false;
+        disableButton();
+        cellGUIHandler.removeHighlight();
     }
 
     private void enableButton() {
-        this.cellGUIHandler.enableButton();
+        cellGUIHandler.enableButton();
     }
 
     private void disableButton() {
-        this.cellGUIHandler.disableButton();
+        cellGUIHandler.disableButton();
     }
 
     public void triggerActivation() {
-        int gameState = this.parentBoard.getGame().getState();
+        int gameState = parentBoard.getGame().getState();
         if (gameState == Game.gameStarted) {
-            Move currentMove = this.parentBoard.getMove();
+            Move currentMove = parentBoard.getMove();
             int moveState = currentMove.getState();
             switch(moveState) {
                 case Move.startCellSelection:
-                    this.parentBoard.selectMoveStartCell(this);
+                    parentBoard.selectMoveStartCell(this);
                     break;
                 case Move.startCellSelected:
-                    if (this.parentBoard.selectedCell == this) {
-                        this.parentBoard.removeMoveStartCell();
+                    if (parentBoard.selectedCell == this) {
+                        parentBoard.removeMoveStartCell();
                     }
                     else {
-                        this.parentBoard.movePiece(this);
+                        parentBoard.movePiece(this);
                     }
                     break;
                 case Move.pieceBouncing:
-                    this.parentBoard.movePiece(this);
+                    parentBoard.movePiece(this);
                     break;
             }
         }
         else {
-            this.parentBoard.pickCell(this);
+            parentBoard.pickCell(this);
         }
     }
 
     public ArrayList<Cell> getNeighbouringCells(Board board) {
         ArrayList<Cell> neighbouringCells = new ArrayList<Cell>();
-        int line = this.line;
-        int column = this.column;
-        if (this.line > 0) {
+        if (line > 0) {
             neighbouringCells.add(board.getCell(line - 1, column));
         }
-        if (this.line < board.numberOfLines - 1) {
+        if (line < board.numberOfLines - 1) {
             neighbouringCells.add(board.getCell(line + 1, column));
         }
-        if (this.column > 0) {
+        if (column > 0) {
             neighbouringCells.add(board.getCell(line, column - 1));
         }
-        if (this.column < board.numberOfColumns - 1) {
+        if (column < board.numberOfColumns - 1) {
             neighbouringCells.add(board.getCell(line, column + 1));
         }
-        if (this.line == board.numberOfLines - 1 && this.parentBoard.getGame().getTurn()) {
+        if (line == board.numberOfLines - 1 && parentBoard.getGame().getTurn()) {
             neighbouringCells.add(board.getTopLineCell());
         }
-        else if (this.line == 0 && !this.parentBoard.getGame().getTurn()) {
+        else if (line == 0 && !parentBoard.getGame().getTurn()) {
             neighbouringCells.add(board.getBottomLineCell());
         }
 

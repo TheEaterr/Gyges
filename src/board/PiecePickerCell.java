@@ -7,7 +7,7 @@ public class PiecePickerCell extends Cell {
     }
 
     public void triggerActivation() {
-        this.parentBoard.pickPiece(this.pieceOnCell);
+        this.getParentBoard().pickPiece(this.getPiece());
     }
     
 }

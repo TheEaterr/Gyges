@@ -10,16 +10,16 @@ import src.gui.*;
 public class Board {
     final public int numberOfLines = 6;
     final public int numberOfColumns = 6;
-    final BoardGUIHandler guiHandler;
-    ArrayList<ArrayList<Cell>> boardStateArray;
-    private HashSet<Cell> highlightedCells;
-    private Cell topLine;
-    private Cell bottomLine;
-    private HashSet<PiecePickerCell> piecePickerBoard;
+    final private BoardGUIHandler guiHandler;
+    final private ArrayList<ArrayList<Cell>> boardStateArray;
+    final private HashSet<Cell> highlightedCells;
+    final private Cell topLine;
+    final private Cell bottomLine;
+    final private HashSet<PiecePickerCell> piecePickerBoard;
+    final private Game game;
     public Cell selectedCell;
     private Move currentMove;
     private PiecePick currentPiecePick;
-    private Game game;
 
     public Board() {
         this.boardStateArray = new ArrayList<ArrayList<Cell>>();
@@ -63,7 +63,7 @@ public class Board {
             CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
             this.guiHandler.addPiecePickerCellGUIHandler(cellGUIHandler);
             Piece piece = Piece.createNewWithNumber(i + 1);
-            cell.setPieceOnTopOfCell(piece);
+            cell.setPieceOnTop(piece);
             piecePickerBoard.add(cell);
             cellsToHighlight.add(cell);
         }
@@ -80,7 +80,7 @@ public class Board {
         }
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
         for (Cell cell : line) {
-            if (cell.pieceOnCell == null) {
+            if (cell.getPiece() == null) {
                 cellsToHighlight.add(cell);
             }
         }
@@ -103,16 +103,16 @@ public class Board {
 
     public void movePiece(Cell endCell) {
         Cell startCell = this.selectedCell;
-        Piece pieceToMove = startCell.getPieceOnTopOfCell();
-        startCell.removePieceOnTopOfCell();
-        boolean isPieceBouncing = endCell.setPieceOnTopOfCell(pieceToMove);
+        Piece pieceToMove = startCell.getPieceOnTop();
+        startCell.removePieceOnTop();
+        boolean isPieceBouncing = endCell.setPieceOnTop(pieceToMove);
         clearHighlightedCells();
         if (endCell.getClass() == GoalCell.class) {
             this.endGame();
         }
         else if (isPieceBouncing) {
             this.selectedCell = endCell;
-            HashSet<Cell> cellsToHighlight = endCell.pieceOnCell.getPossibleSteps(this, endCell);
+            HashSet<Cell> cellsToHighlight = endCell.getPiece().getPossibleSteps(this, endCell);
             this.highlightCells(cellsToHighlight);
         }
         else {
@@ -126,7 +126,7 @@ public class Board {
     }
 
     public void pickCell(Cell cell) {
-        cell.setPieceOnTopOfCell(this.currentPiecePick.getSelectedPiece());
+        cell.setPieceOnTop(this.currentPiecePick.getSelectedPiece());
         this.currentPiecePick.selectCell(cell);
         clearHighlightedCells();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
@@ -138,7 +138,7 @@ public class Board {
         else {
             this.currentPiecePick = new PiecePick(game);
             for (PiecePickerCell piecePickerCell : piecePickerBoard) {
-                int pieceNumber = piecePickerCell.getPieceOnTopOfCell().getNumber();
+                int pieceNumber = piecePickerCell.getPieceOnTop().getNumber();
                 if (game.allowPiecePick(pieceNumber)) {
                     cellsToHighlight.add(piecePickerCell);
                 }
@@ -151,7 +151,7 @@ public class Board {
         this.selectedCell = startCell;
         currentMove.setStartCell(startCell);
         this.clearHighlightedCells();
-        HashSet<Cell> cellsToHighlight = startCell.pieceOnCell.getPossibleSteps(this, startCell);
+        HashSet<Cell> cellsToHighlight = startCell.getPiece().getPossibleSteps(this, startCell);
         cellsToHighlight.add(startCell);
         this.highlightCells(cellsToHighlight);
     }
@@ -186,7 +186,7 @@ public class Board {
     private boolean isPieceOnLine(ArrayList<Cell> line) {
         boolean isPieceOnLine = false;
         for (Cell cell : line) {
-            if (cell.pieceOnCell != null) {
+            if (cell.getPiece() != null) {
                 isPieceOnLine = true;
             }
         }

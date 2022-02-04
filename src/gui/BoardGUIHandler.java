@@ -3,40 +3,49 @@ package src.gui;
 import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.plaf.DimensionUIResource;
 
 import src.board.Board;
 
 public class BoardGUIHandler {  
-    JFrame f;
-    final JPanel boardGUI = new JPanel();
-    final private JPanel gui = new JPanel();
-    private JPanel piecePickerGUI = new JPanel();
-    private JPanel mainBoardGUI;
-    private JPanel topLineGUI;
-    private JPanel bottomLineGUI;
-    private Board board;
+    private JFrame f;
+    final private JPanel boardGUI;
+    final private JPanel gui;
+    final private JPanel piecePickerGUI;
+    final private JPanel mainBoardGUI;
+    final private JPanel topLineGUI;
+    final private JPanel bottomLineGUI;
+    final private Board board;
 
     public BoardGUIHandler(Board board) {
         this.board = board;
+        gui = new JPanel();
         gui.setLayout(new BoxLayout(gui, BoxLayout.X_AXIS));
         gui.setBackground(new Color(180, 90, 0));
+
+        boardGUI = new JPanel();
         boardGUI.setLayout(new BoxLayout(boardGUI, BoxLayout.Y_AXIS));
-        boardGUI.setBorder(new EmptyBorder(0, 0, 0, 0));
-        boardGUI.setBackground(new Color(180, 90, 0));
+        boardGUI.setOpaque(false);
+
         topLineGUI = new JPanel();
-        topLineGUI.setBackground(new Color(180, 90, 0));
-        boardGUI.add(topLineGUI);
+        topLineGUI.setLayout(new BorderLayout());
+        topLineGUI.setOpaque(false);
+
         mainBoardGUI = new JPanel(new GridLayout(this.board.numberOfLines, this.board.numberOfColumns));
-        mainBoardGUI.setBackground(new Color(180, 90, 0));
-        boardGUI.add(mainBoardGUI);
+        mainBoardGUI.setOpaque(false);
+
         bottomLineGUI = new JPanel();
-        bottomLineGUI.setBackground(new Color(180, 90, 0));
+        bottomLineGUI.setLayout(new BorderLayout());
+        bottomLineGUI.setOpaque(false);
+
+        boardGUI.add(topLineGUI);
+        boardGUI.add(mainBoardGUI);
         boardGUI.add(bottomLineGUI);
-        this.piecePickerGUI.setLayout(new BoxLayout(this.piecePickerGUI, BoxLayout.Y_AXIS));
-        this.piecePickerGUI.setBorder(BorderFactory.createLineBorder(Color.black, 4));
-        this.piecePickerGUI.setBackground(new Color(180, 90, 0));
+
+        piecePickerGUI = new JPanel();
+        piecePickerGUI.setLayout(new BoxLayout(piecePickerGUI, BoxLayout.Y_AXIS));
+        piecePickerGUI.setBorder(BorderFactory.createLineBorder(Color.black, 4));
+        piecePickerGUI.setOpaque(false);
     }
 
     public void addCellGUIHandler(CellGUIHandler cellGUIHandler) {
@@ -44,15 +53,17 @@ public class BoardGUIHandler {
     }
 
     public void addTopLineCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        this.topLineGUI.add(cellGUIHandler);
+        topLineGUI.add(cellGUIHandler, BorderLayout.CENTER);
+        topLineGUI.setMaximumSize(topLineGUI.getPreferredSize());
     }
 
     public void addBottomLineCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        this.bottomLineGUI.add(cellGUIHandler);
+        bottomLineGUI.add(cellGUIHandler, BorderLayout.CENTER);
+        bottomLineGUI.setMaximumSize(bottomLineGUI.getPreferredSize());
     }
 
     public void addPiecePickerCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        this.piecePickerGUI.add(cellGUIHandler);
+        piecePickerGUI.add(cellGUIHandler);
     }
 
     public void displayBoard() {
@@ -68,28 +79,29 @@ public class BoardGUIHandler {
         f.pack();
         // ensures the minimum size is enforced.
         f.setMinimumSize(f.getSize());
-        f.setResizable(true);
+        f.setResizable(false);
         f.setVisible(true);
     }
 
     public void displayPiecePicker() {
-        this.piecePickerGUI.setMaximumSize(this.piecePickerGUI.getPreferredSize());
+        // Keeps these three buttons together. 
+        piecePickerGUI.setMaximumSize(piecePickerGUI.getPreferredSize());
         f.setMinimumSize(new DimensionUIResource(0, 0));
-        gui.add(this.piecePickerGUI);
+        gui.add(piecePickerGUI);
         f.pack();
         f.setMinimumSize(f.getSize());
     }
 
     public void hidePiecePicker() {
         f.setMinimumSize(new DimensionUIResource(0, 0));
-        this.piecePickerGUI.setVisible(false);
-        gui.remove(this.piecePickerGUI);
+        piecePickerGUI.setVisible(false);
+        gui.remove(piecePickerGUI);
         f.pack();
         f.setMinimumSize(f.getSize());
     }
         
     public final JComponent getGui() {
-        return boardGUI;
+        return gui;
     }
 
     public void showEndGameMessage(boolean winnerIsPlayer1) {
