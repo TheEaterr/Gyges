@@ -34,6 +34,6 @@ public class PiecePick {
     public void selectCell(Cell cell) {
         this.cellChosen = cell;
         piecePickState = PiecePick.piecePickOver;
-        this.parentGame.finishPiecePick();
+        this.parentGame.finishPiecePick(this.pieceChosen.getNumber());
     }
 }

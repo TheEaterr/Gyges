@@ -68,22 +68,6 @@ public class Board {
             cellsToHighlight.add(cell);
         }
         highlightCells(cellsToHighlight);
-
-        this.guiHandler.displayBoard();
-    }
-
-    public void placePieces(ArrayList<Piece> firstPlayerPieces, ArrayList<Piece> secondPlayerPieces) {
-        for (int i = 0; i < this.numberOfColumns; i++) {
-            Piece piece = firstPlayerPieces.get(i);
-            Cell cell = this.boardStateArray.get(0).get(i);
-            cell.setPieceOnTopOfCell(piece);
-        }
-        for (int i = 0; i < this.numberOfColumns; i++) {
-            Piece piece = secondPlayerPieces.get(i);
-            Cell cell = this.boardStateArray.get(this.numberOfLines - 1).get(i);
-            cell.setPieceOnTopOfCell(piece);
-        }
-        highlightCellsAvailableToMove();
     }
 
     public void highlightCellsToPickPieces() {
@@ -106,8 +90,8 @@ public class Board {
     public void highlightCells(HashSet<Cell> cellsToHighlight) {
         for (Cell cell : cellsToHighlight) {
             cell.highlight();
+            highlightedCells.add(cell);
         }
-        this.highlightedCells = cellsToHighlight;
     }
 
     public void clearHighlightedCells() {
@@ -154,7 +138,10 @@ public class Board {
         else {
             this.currentPiecePick = new PiecePick(game);
             for (PiecePickerCell piecePickerCell : piecePickerBoard) {
-                cellsToHighlight.add(piecePickerCell);
+                int pieceNumber = piecePickerCell.getPieceOnTopOfCell().getNumber();
+                if (game.allowPiecePick(pieceNumber)) {
+                    cellsToHighlight.add(piecePickerCell);
+                }
             }
             highlightCells(cellsToHighlight);
         }
@@ -253,5 +240,9 @@ public class Board {
 
     public Game getGame() {
         return this.game;
+    }
+
+    public void displayBoard() {
+        guiHandler.displayBoard();
     }
 }
