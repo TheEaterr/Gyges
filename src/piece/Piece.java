@@ -1,7 +1,9 @@
 package src.piece;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import src.board.*;
+import src.game.Step;
 
 abstract public class Piece {
     Board board;
@@ -25,9 +27,11 @@ abstract public class Piece {
 
     public abstract int getNumber();
 
-    public abstract HashSet<Cell> getPossibleMoves(Board board, Cell currentCell);
+    public abstract ArrayList<ArrayList<Step>> getPossibleMoves(Board board, Cell currentCell);
 
-    public abstract void recurseTroughPossibleMoves(Board board, Cell currentCell, HashSet<Cell> possibleMoves);
+    public abstract void recurseTroughPossibleMoves(Board board, ArrayList<Step> totalStepList, ArrayList<ArrayList<Step>> possibleMoves);
+
+    public abstract ArrayList<ArrayList<Step>> getPossibleBounces(Board board, Cell currentCell);
 
     public abstract HashSet<Cell> getPossibleSteps(Board board, Cell currentCell);
 }

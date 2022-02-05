@@ -3,24 +3,30 @@ package src.piece;
 import java.util.ArrayList;
 import java.util.HashSet;
 import src.board.*;
+import src.game.Step;
 
 public class DoublePiece extends Piece {
 
     public DoublePiece() {
     }
 
-    public HashSet<Cell> getPossibleMoves(Board board, Cell currentCell) {
-        HashSet<Cell> possibleMoves = new HashSet<Cell>();
-        
-        return possibleMoves;
-    }
-
     public int getNumber(){
         return 2;
     }
 
-    public void recurseTroughPossibleMoves(Board board, Cell currentCell, HashSet<Cell> possibleMoves) {
+    public ArrayList<ArrayList<Step>> getPossibleMoves(Board board, Cell currentCell) {
+        ArrayList<ArrayList<Step>> possibleMoves = new ArrayList<ArrayList<Step>>();
+        return possibleMoves;
+    }
 
+    public void recurseTroughPossibleMoves(Board board, ArrayList<Step> totalStepList, ArrayList<ArrayList<Step>> possibleMoves) {
+
+    }
+
+    public ArrayList<ArrayList<Step>> getPossibleBounces(Board board, Cell currentCell) {
+        ArrayList<ArrayList<Step>> possibleBounces = new ArrayList<ArrayList<Step>>();
+        
+        return possibleBounces;
     }
 
     public HashSet<Cell> getPossibleSteps(Board board, Cell currentCell) {
