@@ -29,28 +29,23 @@ abstract public class Piece {
 
     public static ArrayList<Path> getPossiblePaths(Board board, Cell currentCell) {
         ArrayList<Path> possiblePaths = new ArrayList<Path>();
-        ArrayList<Bounce> possibleBounces = currentCell.getPieceOnTop().getPossibleBounces(board, currentCell);
-        for (Bounce possibleBounce : possibleBounces) {
-            Step lastStep = possibleBounce.get(possibleBounce.size() - 1);
-            Cell lastCell = lastStep.getEndCell();
-            Path possiblePath = new Path();
-            possiblePath.add(possibleBounce);
-            if (lastCell.getPieceOnTop() == null) {
-                possiblePaths.add(possiblePath);
-            }
-            else if (possiblePath.getValid()) {
-                recurseTroughPossiblePaths(board, possiblePath, possiblePaths);
-            }
-        }
+        Path possiblePath = new Path();
+        recurseTroughPossiblePaths(board, currentCell, possiblePath, possiblePaths);
         return possiblePaths;
     }
 
-    private static void recurseTroughPossiblePaths(Board board, Path possiblePath, ArrayList<Path> possiblePaths) {
-        Bounce lastBounce = possiblePath.get(possiblePath.size() - 1);
-        Step lastStep = lastBounce.get(lastBounce.size() - 1);
-        Cell lastCell = lastStep.getEndCell();
-        Piece lastPiece = lastCell.getPiece();
-        ArrayList<Bounce> possibleBounces = lastPiece.getPossibleBounces(board, lastCell);
+    private static void recurseTroughPossiblePaths(Board board, Cell currentCell, Path possiblePath, ArrayList<Path> possiblePaths) {
+        ArrayList<Bounce> possibleBounces;
+        if (possiblePath.size() > 0) {
+            Bounce lastBounce = possiblePath.get(possiblePath.size() - 1);
+            Step lastStep = lastBounce.get(lastBounce.size() - 1);
+            Cell lastCell = lastStep.getEndCell();
+            Piece lastPiece = lastCell.getPiece();
+            possibleBounces = lastPiece.getPossibleBounces(board, lastCell);
+        }
+        else {
+            possibleBounces = currentCell.getPieceOnTop().getPossibleBounces(board, currentCell);
+        }
         for (Bounce possibleBounce : possibleBounces) {
             Path newPath = new Path();
             newPath.addAll(possiblePath);
@@ -60,7 +55,7 @@ abstract public class Piece {
                     possiblePaths.add(newPath);
                 }
                 else {
-                    recurseTroughPossiblePaths(board, newPath, possiblePaths);
+                    recurseTroughPossiblePaths(board, currentCell, newPath, possiblePaths);
                 }
             }
         }
@@ -69,21 +64,20 @@ abstract public class Piece {
     public ArrayList<Bounce> getPossibleBounces(Board board, Cell currentCell) {
         int depthNumber = getNumber();
         ArrayList<Bounce> possibleBounces = new ArrayList<Bounce>();
-        ArrayList<Step> possibleFirstSteps = currentCell.getNeighbouringSteps();
-        for (Step step : possibleFirstSteps) {
-            Piece pieceOnCell = step.getEndCell().getPiece();
-            if (pieceOnCell == null || depthNumber == 1 || step.getEndCell() == currentCell.getParentBoard().selectedCell) {
-                Bounce possibleBounce = new Bounce();
-                possibleBounce.add(step);
-                recurseTroughPossibleBounces(possibleBounce, possibleBounces, depthNumber, currentCell);
-            }
-        }
+        Bounce possibleBounce = new Bounce();
+        recurseTroughPossibleBounces(possibleBounce, possibleBounces, depthNumber, currentCell);
         return possibleBounces;
     }
 
     private void recurseTroughPossibleBounces(Bounce bounce, ArrayList<Bounce> possibleBounces, int depthNumber, Cell currentCell) {
         if (bounce.size() < depthNumber) {
-            ArrayList<Step> possibleSteps =  bounce.getLastStep().getEndCell().getNeighbouringSteps();
+            ArrayList<Step> possibleSteps;
+            if (bounce.size() == 0) {
+                possibleSteps = currentCell.getNeighbouringSteps();
+            }
+            else {
+                possibleSteps =  bounce.getLastStep().getEndCell().getNeighbouringSteps();
+            }
             for (Step step : possibleSteps) {
                 Piece pieceOnCell = step.getEndCell().getPiece();
                 if (pieceOnCell == null || bounce.size() == depthNumber - 1 || step.getEndCell() == currentCell.getParentBoard().selectedCell) {
