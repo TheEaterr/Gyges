@@ -8,10 +8,14 @@ public class Bounce extends ArrayList<Step> {
     public boolean getValid() {
         return isValid;
     }
+
+    public Step getLastStep() {
+        return get(size() - 1);
+    }
     
     @Override
     public boolean add(Step step) {
-        if (size() == 0 || !(contains(step) && contains(step.getReverseStep()))) {
+        if (size() == 0 || (!contains(step) && !contains(step.getReverseStep()))) {
             super.add(step);
             return true;
         }

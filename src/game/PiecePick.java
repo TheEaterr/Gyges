@@ -15,7 +15,6 @@ public class PiecePick {
     public PiecePick(Game game) {
         this.parentGame = game;
         piecePickState = PiecePick.startPieceSelection;
-        game.registerPiecePick(this);
     }
 
     public int getState() {
@@ -34,6 +33,6 @@ public class PiecePick {
     public void selectCell(Cell cell) {
         this.cellChosen = cell;
         piecePickState = PiecePick.piecePickOver;
-        this.parentGame.finishPiecePick(this.pieceChosen.getNumber());
+        parentGame.registerPiecePick(this);
     }
 }

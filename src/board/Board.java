@@ -111,8 +111,13 @@ public class Board {
             this.endGame();
         }
         else if (isPieceBouncing) {
+            currentMove.setBounce(endCell);
             this.selectedCell = endCell;
-            HashSet<Cell> cellsToHighlight = endCell.getPiece().getPossibleSteps(this, endCell);
+            HashSet<Bounce> possibleBounces = currentMove.getNextPossibleBounces();
+            HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
+            for (Bounce bounce : possibleBounces) {
+                cellsToHighlight.add(bounce.getLastStep().getEndCell());
+            }
             this.highlightCells(cellsToHighlight);
         }
         else {
@@ -149,9 +154,14 @@ public class Board {
 
     public void selectMoveStartCell(Cell startCell) {
         this.selectedCell = startCell;
-        currentMove.setStartCell(startCell);
+        ArrayList<Path> possiblePaths = Piece.getPossiblePaths(this, startCell);
+        currentMove.setStartCell(startCell, possiblePaths);
         this.clearHighlightedCells();
-        HashSet<Cell> cellsToHighlight = startCell.getPiece().getPossibleSteps(this, startCell);
+        HashSet<Bounce> possibleBounces = currentMove.getNextPossibleBounces();
+        HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
+        for (Bounce bounce : possibleBounces) {
+            cellsToHighlight.add(bounce.getLastStep().getEndCell());
+        }
         cellsToHighlight.add(startCell);
         this.highlightCells(cellsToHighlight);
     }

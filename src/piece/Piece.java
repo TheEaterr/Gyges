@@ -1,14 +1,13 @@
 package src.piece;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import src.board.*;
 import src.game.Bounce;
+import src.game.Path;
 import src.game.Step;
 
 abstract public class Piece {
     Board board;
-    Cell currentCell;
 
     public static Piece createNewWithNumber(int pieceNumber) {
         Piece piece = null;
@@ -28,53 +27,77 @@ abstract public class Piece {
 
     public abstract int getNumber();
 
-    public static ArrayList<ArrayList<Step>> getPossibleMoves(Board board, Cell currentCell) {
-        ArrayList<ArrayList<Step>> possibleMoves = new ArrayList<ArrayList<Step>>();
+    public static ArrayList<Path> getPossiblePaths(Board board, Cell currentCell) {
+        ArrayList<Path> possiblePaths = new ArrayList<Path>();
         ArrayList<Bounce> possibleBounces = currentCell.getPieceOnTop().getPossibleBounces(board, currentCell);
         for (Bounce possibleBounce : possibleBounces) {
             Step lastStep = possibleBounce.get(possibleBounce.size() - 1);
             Cell lastCell = lastStep.getEndCell();
+            Path possiblePath = new Path();
+            possiblePath.add(possibleBounce);
             if (lastCell.getPieceOnTop() == null) {
-                possibleMoves.add(possibleBounce);
+                possiblePaths.add(possiblePath);
             }
-            else {
-                recurseTroughPossibleMoves(board, possibleBounce, possibleMoves);
+            else if (possiblePath.getValid()) {
+                recurseTroughPossiblePaths(board, possiblePath, possiblePaths);
             }
         }
-        
-        return possibleMoves;
+        return possiblePaths;
     }
 
-    public static void recurseTroughPossibleMoves(Board board, ArrayList<Step> totalStepList, ArrayList<ArrayList<Step>> possibleMoves) {
-        Step lastStep = totalStepList.get(totalStepList.size() - 1);
+    private static void recurseTroughPossiblePaths(Board board, Path possiblePath, ArrayList<Path> possiblePaths) {
+        Bounce lastBounce = possiblePath.get(possiblePath.size() - 1);
+        Step lastStep = lastBounce.get(lastBounce.size() - 1);
         Cell lastCell = lastStep.getEndCell();
         Piece lastPiece = lastCell.getPiece();
         ArrayList<Bounce> possibleBounces = lastPiece.getPossibleBounces(board, lastCell);
-        for (ArrayList<Step> possibleBounce : possibleBounces) {
-            ArrayList<Step> newMoveStepList = new ArrayList<Step>();
-            newMoveStepList.addAll(totalStepList);
-            boolean moveIsValid = true;
-            for (Step possibleStep : possibleBounce) {
-                if (!newMoveStepList.contains(possibleStep) && !newMoveStepList.contains(possibleStep.getReverseStep())) {
-                    newMoveStepList.add(possibleStep);
-                }
-                else {
-                    moveIsValid = false;
-                    break;
-                }
-            }
-            if (moveIsValid) {
+        for (Bounce possibleBounce : possibleBounces) {
+            Path newPath = new Path();
+            newPath.addAll(possiblePath);
+            newPath.add(possibleBounce);
+            if (newPath.getValid()) {
                 if (possibleBounce.get(possibleBounce.size() - 1).getEndCell().getPieceOnTop() == null) {
-                    possibleMoves.add(newMoveStepList);
+                    possiblePaths.add(newPath);
                 }
                 else {
-                    recurseTroughPossibleMoves(board, newMoveStepList, possibleMoves);
+                    recurseTroughPossiblePaths(board, newPath, possiblePaths);
                 }
             }
         }
     }
 
-    public abstract ArrayList<Bounce> getPossibleBounces(Board board, Cell currentCell);
+    public ArrayList<Bounce> getPossibleBounces(Board board, Cell currentCell) {
+        int depthNumber = getNumber();
+        ArrayList<Bounce> possibleBounces = new ArrayList<Bounce>();
+        ArrayList<Step> possibleFirstSteps = currentCell.getNeighbouringSteps();
+        for (Step step : possibleFirstSteps) {
+            Piece pieceOnCell = step.getEndCell().getPiece();
+            if (pieceOnCell == null || depthNumber == 1 || step.getEndCell() == currentCell.getParentBoard().selectedCell) {
+                Bounce possibleBounce = new Bounce();
+                possibleBounce.add(step);
+                recurseTroughPossibleBounces(possibleBounce, possibleBounces, depthNumber, currentCell);
+            }
+        }
+        return possibleBounces;
+    }
 
-    public abstract HashSet<Cell> getPossibleSteps(Board board, Cell currentCell);
+    private void recurseTroughPossibleBounces(Bounce bounce, ArrayList<Bounce> possibleBounces, int depthNumber, Cell currentCell) {
+        if (bounce.size() < depthNumber) {
+            ArrayList<Step> possibleSteps =  bounce.getLastStep().getEndCell().getNeighbouringSteps();
+            for (Step step : possibleSteps) {
+                Piece pieceOnCell = step.getEndCell().getPiece();
+                if (pieceOnCell == null || bounce.size() == depthNumber - 1 || step.getEndCell() == currentCell.getParentBoard().selectedCell) {
+                    Bounce possibleBounce = new Bounce();
+                    possibleBounce.addAll(bounce);
+                    possibleBounce.add(step);
+                    if (possibleBounce.getValid()) {
+                        recurseTroughPossibleBounces(possibleBounce, possibleBounces, depthNumber, currentCell);
+                    }
+                }
+            }
+        }
+        else {
+            possibleBounces.add(bounce);
+        }
+    }
 }

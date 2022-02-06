@@ -7,6 +7,7 @@ public class Step {
     final public static int downDirection = 1;
     final public static int leftDirection = 2;
     final public static int rightDirection = 3;
+    final public static int winDirection = 4;
     final private Cell endCell;
     final private int direction;
 
@@ -59,6 +60,21 @@ public class Step {
 
     @Override
     public String toString() {
-        return ((Integer) endCell.getLine()).toString() + ((Integer) endCell.getColumn()).toString() + ((Integer) direction).toString();
+        String directionString = null;
+        switch(direction) {
+            case Step.upDirection:
+                directionString = "up";
+                break;
+            case Step.downDirection:
+                directionString = "down";
+                break;
+            case Step.leftDirection:
+                directionString = "left";
+                break;
+            case Step.rightDirection:
+                directionString = "right";
+                break;
+        }
+        return ((Integer) endCell.getLine()).toString() + ((Integer) endCell.getColumn()).toString() + directionString;
     }
 }

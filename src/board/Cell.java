@@ -195,11 +195,11 @@ public class Cell {
             neighbouringSteps.add(step);
         }
         if (line == parentBoard.numberOfLines - 1 && parentBoard.getGame().getTurn()) {
-            Step step = new Step(parentBoard.getTopLineCell(), Step.upDirection);
+            Step step = new Step(parentBoard.getTopLineCell(), Step.winDirection);
             neighbouringSteps.add(step);
         }
         else if (line == 0 && !parentBoard.getGame().getTurn()) {
-            Step step = new Step(parentBoard.getBottomLineCell(), Step.downDirection);
+            Step step = new Step(parentBoard.getBottomLineCell(), Step.winDirection);
             neighbouringSteps.add(step);
         }
 

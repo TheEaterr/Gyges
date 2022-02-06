@@ -22,7 +22,7 @@ public class Game {
         this.gameState = Game.piecePicking;
         this.moveList = new ArrayList<Move>();
         this.piecePickList = new ArrayList<PiecePick>();
-        this.isItPlayer1Turn = false;
+        this.isItPlayer1Turn = true;
         this.numberOfPieceToPick = this.associatedBoard.numberOfColumns*2;
         this.numberOfPiecePicked = 0;
         piecePickedListPlayer1 = new ArrayList<Integer>();
@@ -48,10 +48,7 @@ public class Game {
 
     public void registerPiecePick(PiecePick piecePick) {
         this.piecePickList.add(piecePick);
-        this.isItPlayer1Turn = !this.isItPlayer1Turn;
-    }
-
-    public void finishPiecePick(int piecePickedNumber) {
+        int piecePickedNumber = piecePick.pieceChosen.getNumber();
         this.numberOfPiecePicked += 1;
         if (this.numberOfPiecePicked >= this.numberOfPieceToPick) {
             this.gameState = Game.gameStarted;
@@ -64,6 +61,7 @@ public class Game {
             lineToAddInfoTo = piecePickedListPlayer2;
         }
         lineToAddInfoTo.set(piecePickedNumber - 1, lineToAddInfoTo.get(piecePickedNumber - 1) + 1);
+        this.isItPlayer1Turn = !this.isItPlayer1Turn;
     }
 
     public boolean allowPiecePick(int pieceNumber) {

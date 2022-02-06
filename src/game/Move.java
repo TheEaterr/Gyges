@@ -1,5 +1,9 @@
 package src.game;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.function.Predicate;
+
 import src.board.Cell;
 
 public class Move {
@@ -7,41 +11,69 @@ public class Move {
     public static final int startCellSelected = 1;
     public static final int pieceBouncing = 2;
     public static final int moveOver = 3;
+    private boolean isValid = true;
+    private ArrayList<Path> possiblePaths;
     int moveState;
     Cell startCell;
     Cell endCell;
     Game parentGame;
     
     public Move(Game game) {
-        this.parentGame = game;
-        this.moveState = startCellSelection;
-        game.registerMove(this);
+        parentGame = game;
+        moveState = Move.startCellSelection;
+        possiblePaths = new ArrayList<Path>();
     }
 
     public int getState() {
-        return this.moveState;
+        return moveState;
+    }
+
+    public boolean getValid() {
+        return isValid;
     }
 
     public void setState(int moveState) {
         this.moveState = moveState;
     }
 
-    public void setStartCell(Cell startCell) {
+    public void setStartCell(Cell startCell, ArrayList<Path> possiblePaths) {
         this.startCell = startCell;
-        this.moveState = Move.startCellSelected;
+        moveState = Move.startCellSelected;
+        this.possiblePaths = possiblePaths;
     }
 
     public void removeStartCell() {
-        this.startCell = null;
-        this.moveState = Move.startCellSelection;
+        startCell = null;
+        moveState = Move.startCellSelection;
     }
 
-    public void setBouncing() {
-        this.moveState = Move.pieceBouncing;
+    public void setBounce(Cell endCell) {
+        Predicate<Path> wasPathChosen = (Path path) -> (!wasPathChosen(path, endCell));
+        possiblePaths.removeIf(wasPathChosen);
+        for (Path path : possiblePaths) {
+            path.remove(0);
+        }
+        moveState = Move.pieceBouncing;
+    }
+
+    public HashSet<Bounce> getNextPossibleBounces() {
+        HashSet<Bounce> nextPossibleBounces = new HashSet<Bounce>();
+        for (Path path : possiblePaths) {
+            nextPossibleBounces.add(path.get(0));
+        }
+        return nextPossibleBounces;
+    }
+
+    private boolean wasPathChosen(Path path, Cell endCell) {
+        Bounce firstBounce = path.get(0);
+        Step lastStep = firstBounce.getLastStep();
+        Cell nextCell = lastStep.getEndCell();
+        return nextCell == endCell;
     }
 
     public void setEndCell(Cell endCell) {
         this.endCell = endCell;
-        this.moveState = Move.moveOver;
+        moveState = Move.moveOver;
+        parentGame.registerMove(this);
     }
 }
