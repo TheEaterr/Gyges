@@ -3,6 +3,7 @@ package src.piece;
 import java.util.ArrayList;
 import java.util.HashSet;
 import src.board.*;
+import src.game.Bounce;
 import src.game.Step;
 
 public class DoublePiece extends Piece {
@@ -14,18 +15,23 @@ public class DoublePiece extends Piece {
         return 2;
     }
 
-    public ArrayList<ArrayList<Step>> getPossibleMoves(Board board, Cell currentCell) {
-        ArrayList<ArrayList<Step>> possibleMoves = new ArrayList<ArrayList<Step>>();
-        return possibleMoves;
-    }
-
-    public void recurseTroughPossibleMoves(Board board, ArrayList<Step> totalStepList, ArrayList<ArrayList<Step>> possibleMoves) {
-
-    }
-
-    public ArrayList<ArrayList<Step>> getPossibleBounces(Board board, Cell currentCell) {
-        ArrayList<ArrayList<Step>> possibleBounces = new ArrayList<ArrayList<Step>>();
-        
+    public ArrayList<Bounce> getPossibleBounces(Board board, Cell currentCell) {
+        ArrayList<Bounce> possibleBounces = new ArrayList<Bounce>();
+        ArrayList<Step> possibleFirstSteps = currentCell.getNeighbouringSteps();
+        for (Step firstStep : possibleFirstSteps) {
+            Piece pieceOnCell = firstStep.getEndCell().getPiece();
+            if (pieceOnCell == null) {
+                ArrayList<Step> possibleSecondSteps = firstStep.getEndCell().getNeighbouringSteps();
+                for (Step secondStep : possibleSecondSteps) {
+                    Bounce possibleBounce = new Bounce();
+                    possibleBounce.add(firstStep);
+                    possibleBounce.add(secondStep);
+                    if (possibleBounce.getValid()) {
+                        possibleBounces.add(possibleBounce);
+                    }
+                }
+            }
+        }
         return possibleBounces;
     }
 

@@ -23,6 +23,31 @@ public class Step {
         return direction;
     }
 
+    public Step getReverseStep() {
+        int reverseDirection = 0;
+        Cell reverseEndCell = null;
+        switch(direction) {
+            case Step.upDirection:
+                reverseDirection = Step.downDirection;
+                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine() - 1, endCell.getColumn());
+                break;
+            case Step.downDirection:
+                reverseDirection = Step.upDirection;
+                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine() + 1, endCell.getColumn());
+                break;
+            case Step.leftDirection:
+                reverseDirection = Step.rightDirection;
+                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine(), endCell.getColumn() + 1);
+                break;
+            case Step.rightDirection:
+                reverseDirection = Step.leftDirection;
+                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine(), endCell.getColumn() - 1);
+                break;
+        }
+        Step reverseStep = new Step(reverseEndCell, reverseDirection);
+        return reverseStep;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Step)) {
@@ -30,5 +55,10 @@ public class Step {
         }
         Step step = (Step) o;
         return step.getEndCell() == this.endCell && step.getDirection() == this.direction;
+    }
+
+    @Override
+    public String toString() {
+        return ((Integer) endCell.getLine()).toString() + ((Integer) endCell.getColumn()).toString() + ((Integer) direction).toString();
     }
 }

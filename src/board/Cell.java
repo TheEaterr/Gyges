@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import src.game.Game;
 import src.game.Move;
+import src.game.Step;
 import src.gui.CellGUIHandler;
 import src.piece.*;
 
@@ -26,6 +27,14 @@ public class Cell {
 
     public CellGUIHandler getCellGUIHandler() {
         return cellGUIHandler;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getColumn() {
+        return column;
     }
 
     public Piece getPieceOvertop() {
@@ -165,5 +174,35 @@ public class Cell {
         }
 
         return neighbouringCells;
+    }
+
+    public ArrayList<Step> getNeighbouringSteps() {
+        ArrayList<Step> neighbouringSteps = new ArrayList<Step>();
+        if (line > 0) {
+            Step step = new Step(parentBoard.getCell(line - 1, column), Step.downDirection);
+            neighbouringSteps.add(step);
+        }
+        if (line < parentBoard.numberOfLines - 1) {
+            Step step = new Step(parentBoard.getCell(line + 1, column), Step.upDirection);
+            neighbouringSteps.add(step);
+        }
+        if (column > 0) {
+            Step step = new Step(parentBoard.getCell(line, column - 1), Step.leftDirection);
+            neighbouringSteps.add(step);
+        }
+        if (column < parentBoard.numberOfColumns - 1) {
+            Step step = new Step(parentBoard.getCell(line, column + 1), Step.rightDirection);
+            neighbouringSteps.add(step);
+        }
+        if (line == parentBoard.numberOfLines - 1 && parentBoard.getGame().getTurn()) {
+            Step step = new Step(parentBoard.getTopLineCell(), Step.upDirection);
+            neighbouringSteps.add(step);
+        }
+        else if (line == 0 && !parentBoard.getGame().getTurn()) {
+            Step step = new Step(parentBoard.getBottomLineCell(), Step.downDirection);
+            neighbouringSteps.add(step);
+        }
+
+        return neighbouringSteps;
     }
 }

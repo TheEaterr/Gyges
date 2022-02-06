@@ -37,7 +37,7 @@ public class Board {
 
         for (int i = numberOfLines - 1; i >= 0; i--) {
             ArrayList<Cell> line = this.boardStateArray.get(i);
-            for (int j = numberOfColumns -1; j >= 0; j--) {
+            for (int j = 0; j < numberOfColumns; j++) {
                 Cell cell = new Cell(i, j, this);
                 CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
                 this.guiHandler.addCellGUIHandler(cellGUIHandler);
