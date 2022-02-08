@@ -7,7 +7,6 @@ import src.game.Path;
 import src.game.Step;
 
 abstract public class Piece {
-    Board board;
 
     public static Piece createNewWithNumber(int pieceNumber) {
         Piece piece = null;
@@ -49,7 +48,7 @@ abstract public class Piece {
         for (Bounce possibleBounce : possibleBounces) {
             Path newPath = new Path();
             newPath.addAll(possiblePath);
-            newPath.add(possibleBounce);
+            newPath.addLast(possibleBounce);
             if (newPath.getValid()) {
                 if (possibleBounce.get(possibleBounce.size() - 1).getEndCell().getPieceOnTop() == null) {
                     possiblePaths.add(newPath);
@@ -83,7 +82,7 @@ abstract public class Piece {
                 if (pieceOnCell == null || bounce.size() == depthNumber - 1 || step.getEndCell() == currentCell.getParentBoard().selectedCell) {
                     Bounce possibleBounce = new Bounce();
                     possibleBounce.addAll(bounce);
-                    possibleBounce.add(step);
+                    possibleBounce.addLast(step);
                     if (possibleBounce.getValid()) {
                         recurseTroughPossibleBounces(possibleBounce, possibleBounces, depthNumber, currentCell);
                     }

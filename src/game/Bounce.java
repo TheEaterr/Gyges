@@ -1,8 +1,8 @@
 package src.game;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class Bounce extends ArrayList<Step> {
+public class Bounce extends LinkedList<Step> {
     private boolean isValid = true;
 
     public boolean getValid() {
@@ -12,14 +12,17 @@ public class Bounce extends ArrayList<Step> {
     public Step getLastStep() {
         return get(size() - 1);
     }
+
+    public boolean checkCompatibility(Step step) {
+        return size() == 0 || (!contains(step) && !contains(step.getReverseStep()));
+    }
     
     @Override
-    public boolean add(Step step) {
-        if (size() == 0 || (!contains(step) && !contains(step.getReverseStep()))) {
-            super.add(step);
-            return true;
+    public void addLast(Step step) {
+        if (checkCompatibility(step)) {
+            super.addLast(step);
+            return;
         }
         isValid = false;
-        return false;
     }
 }
