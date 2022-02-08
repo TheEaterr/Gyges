@@ -75,7 +75,7 @@ abstract public class Piece {
                 possibleSteps = currentCell.getNeighbouringSteps();
             }
             else {
-                possibleSteps =  bounce.getLastStep().getEndCell().getNeighbouringSteps();
+                possibleSteps =  bounce.getLast().getEndCell().getNeighbouringSteps();
             }
             for (Step step : possibleSteps) {
                 Piece pieceOnCell = step.getEndCell().getPiece();

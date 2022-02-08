@@ -16,7 +16,7 @@ public class Board {
     final private Cell topLine;
     final private Cell bottomLine;
     final private HashSet<PiecePickerCell> piecePickerBoard;
-    final private Game game;
+    private Game game;
     public Cell selectedCell;
     private Move currentMove;
     private PiecePick currentPiecePick;
@@ -30,11 +30,9 @@ public class Board {
             }
             this.boardStateArray.add(line);
         }
-        this.guiHandler = new BoardGUIHandler(this);
-        this.highlightedCells = new HashSet<Cell>();
-        this.game = new Game(this);
-        this.currentPiecePick = new PiecePick(game);
-
+        guiHandler = new BoardGUIHandler(this);
+        highlightedCells = new HashSet<Cell>();
+        
         for (int i = numberOfLines - 1; i >= 0; i--) {
             ArrayList<Cell> line = this.boardStateArray.get(i);
             for (int j = 0; j < numberOfColumns; j++) {
@@ -45,16 +43,16 @@ public class Board {
             }
         }
         {
-        Cell cell = new GoalCell(this.numberOfLines, -1, this);
-        CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
-        this.guiHandler.addTopLineCellGUIHandler(cellGUIHandler);
-        this.topLine = cell;
+            Cell cell = new GoalCell(this.numberOfLines, -1, this);
+            CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
+            this.guiHandler.addTopLineCellGUIHandler(cellGUIHandler);
+            this.topLine = cell;
         }
         {
-        Cell cell = new GoalCell(-1, -1, this);
-        CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
-        this.guiHandler.addBottomLineCellGUIHandler(cellGUIHandler);
-        this.bottomLine = cell;
+            Cell cell = new GoalCell(-1, -1, this);
+            CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
+            this.guiHandler.addBottomLineCellGUIHandler(cellGUIHandler);
+            this.bottomLine = cell;
         }
         piecePickerBoard = new HashSet<PiecePickerCell>();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
@@ -67,6 +65,8 @@ public class Board {
             piecePickerBoard.add(cell);
             cellsToHighlight.add(cell);
         }
+        game = new Game(this);
+        currentPiecePick = new PiecePick(game);
         highlightCells(cellsToHighlight);
     }
 
@@ -116,7 +116,7 @@ public class Board {
             HashSet<Bounce> possibleBounces = currentMove.getNextPossibleBounces();
             HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
             for (Bounce bounce : possibleBounces) {
-                cellsToHighlight.add(bounce.getLastStep().getEndCell());
+                cellsToHighlight.add(bounce.getLast().getEndCell());
             }
             this.highlightCells(cellsToHighlight);
         }
@@ -160,7 +160,7 @@ public class Board {
         HashSet<Bounce> possibleBounces = currentMove.getNextPossibleBounces();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
         for (Bounce bounce : possibleBounces) {
-            cellsToHighlight.add(bounce.getLastStep().getEndCell());
+            cellsToHighlight.add(bounce.getLast().getEndCell());
         }
         cellsToHighlight.add(startCell);
         this.highlightCells(cellsToHighlight);
@@ -220,16 +220,44 @@ public class Board {
     }
 
     private void endGame() {
-        boolean winnerIsPlayer1 = this.game.getTurn();
+        boolean winnerIsPlayer1 = game.getTurn();
         Cell endCell;
         if (winnerIsPlayer1) {
-            endCell = this.getTopLineCell();
+            endCell = getTopLineCell();
         }
         else {
-            endCell = this.getBottomLineCell();
+            endCell = getBottomLineCell();
         }
-        this.currentMove.setEndCell(endCell);
-        this.guiHandler.showEndGameMessage(winnerIsPlayer1);
+        currentMove.setEndCell(endCell);
+        game.endGame();
+        guiHandler.showEndGameMessage(winnerIsPlayer1);
+        restartGame();
+    }
+
+    private void restartGame() {
+        clearHighlightedCells();
+        clearBoard();
+        guiHandler.displayPiecePicker();
+        HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
+        for (Cell cell : piecePickerBoard) {
+            cellsToHighlight.add(cell);
+        }
+        game = new Game(this);
+        currentPiecePick = new PiecePick(game);
+        currentMove = null;
+        selectedCell = null;
+        highlightCells(cellsToHighlight);
+    }
+
+    private void clearBoard() {
+        for (ArrayList<Cell> line : boardStateArray) {
+            for (Cell cell : line) {
+                cell.removePieceOnTop();
+                cell.removePieceOnTop();
+            }
+        }
+        topLine.removePieceOnTop();
+        bottomLine.removePieceOnTop();
     }
 
     public Move getMove() {

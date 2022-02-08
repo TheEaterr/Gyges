@@ -59,7 +59,7 @@ public class Move {
         Predicate<Path> wasPathChosen = (Path path) -> (!wasPathChosen(path, endCell));
         possiblePaths.removeIf(wasPathChosen);
         for (Path path : possiblePaths) {
-            path.remove(0);
+            path.removeFirst();
         }
         moveState = Move.pieceBouncing;
     }
@@ -73,8 +73,8 @@ public class Move {
     }
 
     private boolean wasPathChosen(Path path, Cell endCell) {
-        Bounce firstBounce = path.get(0);
-        Step lastStep = firstBounce.getLastStep();
+        Bounce firstBounce = path.getFirst();
+        Step lastStep = firstBounce.getLast();
         Cell nextCell = lastStep.getEndCell();
         return nextCell == endCell;
     }

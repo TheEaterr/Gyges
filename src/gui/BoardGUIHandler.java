@@ -94,7 +94,6 @@ public class BoardGUIHandler {
 
     public void hidePiecePicker() {
         f.setMinimumSize(new DimensionUIResource(0, 0));
-        piecePickerGUI.setVisible(false);
         gui.remove(piecePickerGUI);
         f.pack();
         f.setMinimumSize(f.getSize());

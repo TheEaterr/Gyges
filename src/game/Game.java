@@ -7,6 +7,7 @@ import src.board.Board;
 public class Game {
     public static final int piecePicking = 0;
     public static final int gameStarted = 1;
+    public static final int gameOver = 2;
     private Board associatedBoard;
     private int gameState;
     private boolean isItPlayer1Turn;
@@ -78,5 +79,9 @@ public class Game {
             numberToCompareWith++;
         }
         return numberOfSuchPiecePicked < numberToCompareWith;
+    }
+
+    public void endGame() {
+        gameState = Game.gameOver;
     }
 }

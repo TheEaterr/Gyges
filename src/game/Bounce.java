@@ -9,10 +9,6 @@ public class Bounce extends LinkedList<Step> {
         return isValid;
     }
 
-    public Step getLastStep() {
-        return get(size() - 1);
-    }
-
     public boolean checkCompatibility(Step step) {
         return size() == 0 || (!contains(step) && !contains(step.getReverseStep()));
     }
