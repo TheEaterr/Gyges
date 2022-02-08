@@ -7,10 +7,10 @@ public class PiecePick {
     public static final int startPieceSelection = 0;
     public static final int pieceSelected = 1;
     public static final int piecePickOver = 2;
-    int piecePickState;
-    Game parentGame;
-    Cell cellChosen;
-    Piece pieceChosen;
+    private int piecePickState;
+    private final Game parentGame;
+    private Cell cellChosen;
+    private Piece pieceChosen;
 
     public PiecePick(Game game) {
         this.parentGame = game;
@@ -23,6 +23,10 @@ public class PiecePick {
 
     public Piece getSelectedPiece() {
         return pieceChosen;
+    }
+
+    public Cell getSelectedCell() {
+        return cellChosen;
     }
 
     public void selectPiece(Piece piece) {

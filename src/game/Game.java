@@ -48,7 +48,7 @@ public class Game {
 
     public void registerPiecePick(PiecePick piecePick) {
         this.piecePickList.add(piecePick);
-        int piecePickedNumber = piecePick.pieceChosen.getNumber();
+        int piecePickedNumber = piecePick.getSelectedPiece().getNumber();
         this.numberOfPiecePicked += 1;
         if (this.numberOfPiecePicked >= this.numberOfPieceToPick) {
             this.gameState = Game.gameStarted;

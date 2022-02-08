@@ -13,10 +13,10 @@ public class Move {
     public static final int moveOver = 3;
     private boolean isValid = true;
     private ArrayList<Path> possiblePaths;
-    int moveState;
-    Cell startCell;
-    Cell endCell;
-    Game parentGame;
+    private int moveState;
+    private Cell startCell;
+    private Cell endCell;
+    final private Game parentGame;
     
     public Move(Game game) {
         parentGame = game;
@@ -30,6 +30,14 @@ public class Move {
 
     public boolean getValid() {
         return isValid;
+    }
+
+    public Cell getStartCell() {
+        return startCell;
+    }
+
+    public Cell getEndCell() {
+        return endCell;
     }
 
     public void setState(int moveState) {

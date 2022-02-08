@@ -6,6 +6,7 @@ public class PiecePickerCell extends Cell {
         super(line, column, parentBoard);
     }
 
+    @Override
     public void triggerActivation() {
         this.getParentBoard().pickPiece(this.getPiece());
     }

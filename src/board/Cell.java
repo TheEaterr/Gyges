@@ -152,30 +152,6 @@ public class Cell {
         }
     }
 
-    public ArrayList<Cell> getNeighbouringCells(Board board) {
-        ArrayList<Cell> neighbouringCells = new ArrayList<Cell>();
-        if (line > 0) {
-            neighbouringCells.add(board.getCell(line - 1, column));
-        }
-        if (line < board.numberOfLines - 1) {
-            neighbouringCells.add(board.getCell(line + 1, column));
-        }
-        if (column > 0) {
-            neighbouringCells.add(board.getCell(line, column - 1));
-        }
-        if (column < board.numberOfColumns - 1) {
-            neighbouringCells.add(board.getCell(line, column + 1));
-        }
-        if (line == board.numberOfLines - 1 && parentBoard.getGame().getTurn()) {
-            neighbouringCells.add(board.getTopLineCell());
-        }
-        else if (line == 0 && !parentBoard.getGame().getTurn()) {
-            neighbouringCells.add(board.getBottomLineCell());
-        }
-
-        return neighbouringCells;
-    }
-
     public ArrayList<Step> getNeighbouringSteps() {
         ArrayList<Step> neighbouringSteps = new ArrayList<Step>();
         if (line > 0) {
