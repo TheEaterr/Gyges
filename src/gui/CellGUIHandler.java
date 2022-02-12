@@ -1,7 +1,7 @@
-package src.gui;
+package gui;
 
-import src.piece.*;
-import src.board.*;
+import piece.*;
+import board.*;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
@@ -9,13 +9,13 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.plaf.DimensionUIResource;
 
 public class CellGUIHandler extends JPanel {
-    final private ImageIcon cellBackground = new ImageIcon("src/gui/assets/blank.png");
-    final private ImageIcon oneIcon = new ImageIcon("src/gui/assets/one.png");
-    final private ImageIcon twoIcon = new ImageIcon("src/gui/assets/two.png");
-    final private ImageIcon threeIcon = new ImageIcon("src/gui/assets/three.png");
-    final private ImageIcon oneOvertopIcon = new ImageIcon("src/gui/assets/oneOvertop.png");
-    final private ImageIcon twoOvertopIcon = new ImageIcon("src/gui/assets/twoOvertop.png");
-    final private ImageIcon threeOvertopIcon = new ImageIcon("src/gui/assets/threeOvertop.png");
+    final private ImageIcon cellBackground = new ImageIcon("assets/blank.png");
+    final private ImageIcon oneIcon = new ImageIcon("assets/one.png");
+    final private ImageIcon twoIcon = new ImageIcon("assets/two.png");
+    final private ImageIcon threeIcon = new ImageIcon("assets/three.png");
+    final private ImageIcon oneOvertopIcon = new ImageIcon("assets/oneOvertop.png");
+    final private ImageIcon twoOvertopIcon = new ImageIcon("assets/twoOvertop.png");
+    final private ImageIcon threeOvertopIcon = new ImageIcon("assets/threeOvertop.png");
     final private JButton cellButton;
     final private JPanel labelHolder;
     final private JLabel pieceOnCellLabel;

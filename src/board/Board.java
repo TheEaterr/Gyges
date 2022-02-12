@@ -1,11 +1,11 @@
-package src.board;
+package board;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import src.piece.*;
-import src.game.*;
-import src.gui.*;
+import piece.*;
+import game.*;
+import gui.*;
 
 public class Board {
     final public int numberOfLines = 6;

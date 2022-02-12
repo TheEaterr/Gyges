@@ -1,10 +1,10 @@
-package src.game;
+package game;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Predicate;
 
-import src.board.Cell;
+import board.Cell;
 
 public class Move {
     public static final int startCellSelection = 0;

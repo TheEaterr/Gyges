@@ -1,7 +1,7 @@
-package src.game;
+package game;
 
-import src.board.Cell;
-import src.piece.Piece;
+import board.Cell;
+import piece.Piece;
 
 public class PiecePick {
     public static final int startPieceSelection = 0;

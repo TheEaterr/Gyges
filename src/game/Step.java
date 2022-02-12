@@ -1,6 +1,6 @@
-package src.game;
+package game;
 
-import src.board.Cell;
+import board.Cell;
 
 public class Step {
     final public static int upDirection = 0;

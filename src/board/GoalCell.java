@@ -1,8 +1,8 @@
-package src.board;
+package board;
 
 import java.util.ArrayList;
 
-import src.game.Step;
+import game.Step;
 
 public class GoalCell extends Cell {
 

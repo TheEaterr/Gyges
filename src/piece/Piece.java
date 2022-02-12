@@ -1,10 +1,10 @@
-package src.piece;
+package piece;
 
 import java.util.ArrayList;
-import src.board.*;
-import src.game.Bounce;
-import src.game.Path;
-import src.game.Step;
+import board.*;
+import game.Bounce;
+import game.Path;
+import game.Step;
 
 abstract public class Piece {
 

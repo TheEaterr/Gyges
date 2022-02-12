@@ -1,6 +1,4 @@
-package src;
-
-import src.board.Board;
+import board.Board;
 
 class Main {
   public static void main(String[] args) {

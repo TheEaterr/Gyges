@@ -1,12 +1,12 @@
-package src.board;
+package board;
 
 import java.util.ArrayList;
 
-import src.game.Game;
-import src.game.Move;
-import src.game.Step;
-import src.gui.CellGUIHandler;
-import src.piece.*;
+import game.Game;
+import game.Move;
+import game.Step;
+import gui.CellGUIHandler;
+import piece.*;
 
 public class Cell {
     final private int line;

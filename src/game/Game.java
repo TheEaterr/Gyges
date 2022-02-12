@@ -1,8 +1,8 @@
-package src.game;
+package game;
 
 import java.util.ArrayList;
 
-import src.board.Board;
+import board.Board;
 
 public class Game {
     public static final int piecePicking = 0;

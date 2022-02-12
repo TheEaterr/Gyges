@@ -1,4 +1,4 @@
-package src.board;
+package board;
 
 public class PiecePickerCell extends Cell {
 

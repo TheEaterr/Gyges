@@ -1,11 +1,11 @@
-package src.gui;
+package gui;
 
 import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.plaf.DimensionUIResource;
 
-import src.board.Board;
+import board.Board;
 
 public class BoardGUIHandler {  
     private JFrame f;

@@ -1,4 +1,4 @@
-package src.piece;
+package piece;
 
 public class SimplePiece extends Piece {
     
