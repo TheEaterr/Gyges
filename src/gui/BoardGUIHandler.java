@@ -79,7 +79,7 @@ public class BoardGUIHandler {
         f.pack();
         // ensures the minimum size is enforced.
         f.setMinimumSize(f.getSize());
-        f.setResizable(false);
+        f.setResizable(true);
         f.setVisible(true);
     }
 
