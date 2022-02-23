@@ -3,9 +3,9 @@ package board;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import frontend.gui.*;
 import piece.*;
 import game.*;
-import gui.*;
 
 public class Board {
     final public int numberOfLines = 6;
@@ -137,8 +137,7 @@ public class Board {
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
         if (this.game.getState() == Game.gameStarted) {
             this.guiHandler.hidePiecePicker();
-            this.currentMove = new Move(game);
-            highlightCellsAvailableToMove();
+            startNewMove(null);
         }
         else {
             this.currentPiecePick = new PiecePick(game);
@@ -154,8 +153,7 @@ public class Board {
 
     public void selectMoveStartCell(Cell startCell) {
         this.selectedCell = startCell;
-        ArrayList<Path> possiblePaths = Piece.getPossiblePaths(this, startCell);
-        currentMove.setStartCell(startCell, possiblePaths);
+        currentMove.setStartCell(startCell);
         this.clearHighlightedCells();
         HashSet<Bounce> possibleBounces = currentMove.getNextPossibleBounces();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
@@ -173,11 +171,29 @@ public class Board {
     }
 
     private void highlightCellsAvailableToMove() {
+        highlightCells(currentMove.getPossibleStartCells());
+    }
+
+    private void addPossiblePathsForCellsOnLine(ArrayList<Cell> line, ArrayList<Path> allPossiblePaths, HashSet<Cell> possibleStartCells) {
+        for (Cell cell : line) {
+            if (cell.getPiece() != null) {
+                allPossiblePaths.addAll(Piece.getPossiblePaths(this, cell));
+                possibleStartCells.add(cell);
+            }
+        }
+    }
+
+    private void startNewMove(Cell endCell) {
+        if (endCell != null) {
+            this.currentMove.setEndCell(endCell);
+        }
+        ArrayList<Path> allPossiblePaths = new ArrayList<Path>();
+        HashSet<Cell> possibleStartCells = new HashSet<Cell>();
         if (this.game.getTurn()) {
             for (int i = 0; i < numberOfLines; i++) {
                 ArrayList<Cell> line = this.boardStateArray.get(i);
-                if (isPieceOnLine(line)) {
-                    highlightCellsOnLine(line);
+                addPossiblePathsForCellsOnLine(line, allPossiblePaths, possibleStartCells);
+                if (possibleStartCells.size() > 0) {
                     break;
                 }
             }
@@ -185,38 +201,19 @@ public class Board {
         else {
             for (int i = numberOfLines - 1; i > 0; i--) {
                 ArrayList<Cell> line = this.boardStateArray.get(i);
-                if (isPieceOnLine(line)) {
-                    highlightCellsOnLine(line);
+                addPossiblePathsForCellsOnLine(line, allPossiblePaths, possibleStartCells);
+                if (possibleStartCells.size() > 0) {
                     break;
                 }
             }
         }
-    }
-
-    private boolean isPieceOnLine(ArrayList<Cell> line) {
-        boolean isPieceOnLine = false;
-        for (Cell cell : line) {
-            if (cell.getPiece() != null) {
-                isPieceOnLine = true;
-            }
+        if (possibleStartCells.size() == 0) {
+            endGame();
         }
-        return isPieceOnLine;
-    }
-
-    private void highlightCellsOnLine(ArrayList<Cell> line) {
-        HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
-        for (Cell cell : line) {
-            if (cell.getPiece() != null) {
-                cellsToHighlight.add(cell);
-            }
+        else {
+            this.currentMove = new Move(game, allPossiblePaths, possibleStartCells);
+            this.highlightCellsAvailableToMove();
         }
-        this.highlightCells(cellsToHighlight);
-    }
-
-    private void startNewMove(Cell endCell) {
-        this.currentMove.setEndCell(endCell);
-        this.currentMove = new Move(game);
-        this.highlightCellsAvailableToMove();
     }
 
     private void endGame() {

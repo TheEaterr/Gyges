@@ -2,10 +2,10 @@ package board;
 
 import java.util.ArrayList;
 
+import frontend.gui.CellGUIHandler;
 import game.Game;
 import game.Move;
 import game.Step;
-import gui.CellGUIHandler;
 import piece.*;
 
 public class Cell {
@@ -131,10 +131,10 @@ public class Cell {
             Move currentMove = parentBoard.getMove();
             int moveState = currentMove.getState();
             switch(moveState) {
-                case Move.startCellSelection:
+                case Move.START_CELL_SELECTION:
                     parentBoard.selectMoveStartCell(this);
                     break;
-                case Move.startCellSelected:
+                case Move.START_CELL_SELECTED:
                     if (parentBoard.selectedCell == this) {
                         parentBoard.removeMoveStartCell();
                     }
@@ -142,7 +142,7 @@ public class Cell {
                         parentBoard.movePiece(this);
                     }
                     break;
-                case Move.pieceBouncing:
+                case Move.PIECE_BOUNCING:
                     parentBoard.movePiece(this);
                     break;
             }

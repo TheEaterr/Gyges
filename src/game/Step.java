@@ -20,32 +20,46 @@ public class Step {
         return endCell;
     }
 
+    public Cell getStartCell() {
+        Cell startCell = null;
+        switch(direction) {
+            case Step.upDirection:
+                startCell = endCell.getParentBoard().getCell(endCell.getLine() - 1, endCell.getColumn());
+                break;
+            case Step.downDirection:
+                startCell = endCell.getParentBoard().getCell(endCell.getLine() + 1, endCell.getColumn());
+                break;
+            case Step.leftDirection:
+                startCell = endCell.getParentBoard().getCell(endCell.getLine(), endCell.getColumn() + 1);
+                break;
+            case Step.rightDirection:
+                startCell = endCell.getParentBoard().getCell(endCell.getLine(), endCell.getColumn() - 1);
+                break;
+        }
+        return startCell;
+    }
+
     public int getDirection() {
         return direction;
     }
 
     public Step getReverseStep() {
         int reverseDirection = 0;
-        Cell reverseEndCell = null;
         switch(direction) {
             case Step.upDirection:
                 reverseDirection = Step.downDirection;
-                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine() - 1, endCell.getColumn());
                 break;
             case Step.downDirection:
                 reverseDirection = Step.upDirection;
-                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine() + 1, endCell.getColumn());
                 break;
             case Step.leftDirection:
                 reverseDirection = Step.rightDirection;
-                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine(), endCell.getColumn() + 1);
                 break;
             case Step.rightDirection:
                 reverseDirection = Step.leftDirection;
-                reverseEndCell = endCell.getParentBoard().getCell(endCell.getLine(), endCell.getColumn() - 1);
                 break;
         }
-        Step reverseStep = new Step(reverseEndCell, reverseDirection);
+        Step reverseStep = new Step(getStartCell(), reverseDirection);
         return reverseStep;
     }
 

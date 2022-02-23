@@ -1,4 +1,4 @@
-package gui;
+package frontend.gui;
 
 import piece.*;
 import board.*;

@@ -1,13 +1,14 @@
-package gui;
+package frontend.gui;
 
 import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.plaf.DimensionUIResource;
-
+import frontend.BoardFrontEndHandler;
+import frontend.CellFrontEndHandler;
 import board.Board;
 
-public class BoardGUIHandler {  
+public class BoardGUIHandler extends BoardFrontEndHandler{  
     private JFrame f;
     final private JPanel boardGUI;
     final private JPanel gui;
@@ -52,18 +53,27 @@ public class BoardGUIHandler {
         mainBoardGUI.add(cellGUIHandler);
     }
 
+    public void addCellGUIHandler(CellFrontEndHandler cellGUIHandler) {}
+
     public void addTopLineCellGUIHandler(CellGUIHandler cellGUIHandler) {
         topLineGUI.add(cellGUIHandler, BorderLayout.CENTER);
         topLineGUI.setMaximumSize(topLineGUI.getPreferredSize());
     }
+
+    public void addTopLineCellGUIHandler(CellFrontEndHandler cellGUIHandler) {}
 
     public void addBottomLineCellGUIHandler(CellGUIHandler cellGUIHandler) {
         bottomLineGUI.add(cellGUIHandler, BorderLayout.CENTER);
         bottomLineGUI.setMaximumSize(bottomLineGUI.getPreferredSize());
     }
 
+    public void addBottomLineCellGUIHandler(CellFrontEndHandler cellGUIHandler) {}
+
     public void addPiecePickerCellGUIHandler(CellGUIHandler cellGUIHandler) {
         piecePickerGUI.add(cellGUIHandler);
+    }
+
+    public void addPiecePickerCellGUIHandler(CellFrontEndHandler cellGUIHandler) {
     }
 
     public void displayBoard() {
