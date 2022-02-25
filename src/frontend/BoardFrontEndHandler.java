@@ -2,13 +2,13 @@ package frontend;
 
 abstract public class BoardFrontEndHandler {
 
-    public abstract void addCellGUIHandler(CellFrontEndHandler CellCmdHandler);
+    public abstract void addCellFrontEndHandler(CellFrontEndHandler CellCmdHandler);
 
-    public abstract  void addTopLineCellGUIHandler(CellFrontEndHandler cellCmdHandler);
+    public abstract  void addTopLineCellFrontEndHandler(CellFrontEndHandler cellCmdHandler);
 
-    public abstract  void addBottomLineCellGUIHandler(CellFrontEndHandler cellCmdHandler);
+    public abstract  void addBottomLineCellFrontEndHandler(CellFrontEndHandler cellCmdHandler);
 
-    public abstract void addPiecePickerCellGUIHandler(CellFrontEndHandler cellCmdHandler);
+    public abstract void addPiecePickerCellFrontEndHandler(CellFrontEndHandler cellCmdHandler);
 
     public abstract  void displayBoard();
 

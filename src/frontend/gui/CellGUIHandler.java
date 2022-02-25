@@ -2,13 +2,15 @@ package frontend.gui;
 
 import piece.*;
 import board.*;
+import frontend.CellFrontEndHandler;
+
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.plaf.DimensionUIResource;
 
-public class CellGUIHandler extends JPanel {
+public class CellGUIHandler extends CellFrontEndHandler {
     final private ImageIcon cellBackground = new ImageIcon("assets/blank.png");
     final private ImageIcon oneIcon = new ImageIcon("assets/one.png");
     final private ImageIcon twoIcon = new ImageIcon("assets/two.png");
@@ -16,6 +18,7 @@ public class CellGUIHandler extends JPanel {
     final private ImageIcon oneOvertopIcon = new ImageIcon("assets/oneOvertop.png");
     final private ImageIcon twoOvertopIcon = new ImageIcon("assets/twoOvertop.png");
     final private ImageIcon threeOvertopIcon = new ImageIcon("assets/threeOvertop.png");
+    final private JPanel CellGUI;
     final private JButton cellButton;
     final private JPanel labelHolder;
     final private JLabel pieceOnCellLabel;
@@ -25,8 +28,9 @@ public class CellGUIHandler extends JPanel {
     private Cell cell;
     
     public CellGUIHandler() {
-        setLayout(new BorderLayout());
-        setOpaque(false);
+        CellGUI = new JPanel();
+        CellGUI.setLayout(new BorderLayout());
+        CellGUI.setOpaque(false);
 
         cellButton = new JButton();
         cellButton.setIcon(cellBackground);
@@ -62,7 +66,11 @@ public class CellGUIHandler extends JPanel {
         );
                 
         cellButton.add(labelHolder);
-        add(cellButton);
+        CellGUI.add(cellButton);
+    }
+
+    public JPanel getCellGui() {
+        return CellGUI;
     }
             
     public void highlight() {

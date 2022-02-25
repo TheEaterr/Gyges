@@ -5,7 +5,7 @@
   <jar>..\Gyges.jar</jar>
   <outfile>output\Gyges\Gygesc.exe</outfile>
   <errTitle></errTitle>
-  <cmdLine>test</cmdLine>
+  <cmdLine>-cmd</cmdLine>
   <chdir>.</chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>

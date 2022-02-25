@@ -26,10 +26,6 @@ public class CellCmdHandler extends CellFrontEndHandler{
         this.cell = cell;
     }
 
-    public Cell getCell() {
-        return cell;
-    }
-
     public void setPieceOnCell(Piece piece) {
     }
 

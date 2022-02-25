@@ -2,7 +2,8 @@ package board;
 
 import java.util.ArrayList;
 
-import frontend.gui.CellGUIHandler;
+import frontend.CellFrontEndHandler;
+import frontend.FrontEndFactory;
 import game.Game;
 import game.Move;
 import game.Step;
@@ -13,7 +14,7 @@ public class Cell {
     final private int column;
     private Piece pieceOnCell;
     private Piece pieceOvertopCell;
-    final private CellGUIHandler cellGUIHandler;
+    final private CellFrontEndHandler cellFrontEndHandler;
     final private Board parentBoard;
 
     public Cell(int line, int column, Board parentBoard) {
@@ -21,12 +22,13 @@ public class Cell {
         this.column = column;
         this.parentBoard = parentBoard;
 
-        cellGUIHandler = new CellGUIHandler();
-        cellGUIHandler.setCell(this);
+        FrontEndFactory frontEndFactory = parentBoard.getFrontEndFactory();
+        cellFrontEndHandler = frontEndFactory.createCellFrontEndHandler();
+        cellFrontEndHandler.setCell(this);
     }
 
-    public CellGUIHandler getCellGUIHandler() {
-        return cellGUIHandler;
+    public CellFrontEndHandler getCellFrontEndHandler() {
+        return cellFrontEndHandler;
     }
 
     public int getLine() {
@@ -56,22 +58,22 @@ public class Cell {
 
     private void setPiece(Piece piece) {
         pieceOnCell = piece;
-        cellGUIHandler.setPieceOnCell(piece);
+        cellFrontEndHandler.setPieceOnCell(piece);
     }
 
     private void removePiece() {
         pieceOnCell = null;
-        cellGUIHandler.removePiece();
+        cellFrontEndHandler.removePiece();
     }
 
     private void setPieceOvertop(Piece piece) {
-        cellGUIHandler.setPieceOvertopCell(piece);
+        cellFrontEndHandler.setPieceOvertopCell(piece);
         pieceOvertopCell = piece;
     }
 
     private void removePieceOvertop() {
         pieceOvertopCell = null;
-        cellGUIHandler.removePieceOvertopCell();
+        cellFrontEndHandler.removePieceOvertopCell();
     }
 
     public void removePieceOnTop() {
@@ -109,20 +111,20 @@ public class Cell {
 
     public void highlight() {
         enableButton();
-        cellGUIHandler.highlight();
+        cellFrontEndHandler.highlight();
     }
 
     public void removeHighlight() {
         disableButton();
-        cellGUIHandler.removeHighlight();
+        cellFrontEndHandler.removeHighlight();
     }
 
     private void enableButton() {
-        cellGUIHandler.enableButton();
+        cellFrontEndHandler.enableButton();
     }
 
     private void disableButton() {
-        cellGUIHandler.disableButton();
+        cellFrontEndHandler.disableButton();
     }
 
     public void triggerActivation() {

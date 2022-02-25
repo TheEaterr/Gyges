@@ -15,8 +15,6 @@ abstract public class CellFrontEndHandler {
 
     public abstract void setCell(Cell cell);
 
-    public abstract Cell getCell();
-
     public abstract void setPieceOnCell(Piece piece);
 
     public abstract void setPieceOvertopCell(Piece piece);

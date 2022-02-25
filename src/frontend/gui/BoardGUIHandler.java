@@ -49,31 +49,26 @@ public class BoardGUIHandler extends BoardFrontEndHandler{
         piecePickerGUI.setOpaque(false);
     }
 
-    public void addCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        mainBoardGUI.add(cellGUIHandler);
+    public void addCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellGUIHandler cellGUIHandler = (CellGUIHandler) cellFrontEndHandler;
+        mainBoardGUI.add(cellGUIHandler.getCellGui());
     }
 
-    public void addCellGUIHandler(CellFrontEndHandler cellGUIHandler) {}
-
-    public void addTopLineCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        topLineGUI.add(cellGUIHandler, BorderLayout.CENTER);
+    public void addTopLineCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellGUIHandler cellGUIHandler = (CellGUIHandler) cellFrontEndHandler;
+        topLineGUI.add(cellGUIHandler.getCellGui(), BorderLayout.CENTER);
         topLineGUI.setMaximumSize(topLineGUI.getPreferredSize());
     }
 
-    public void addTopLineCellGUIHandler(CellFrontEndHandler cellGUIHandler) {}
-
-    public void addBottomLineCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        bottomLineGUI.add(cellGUIHandler, BorderLayout.CENTER);
+    public void addBottomLineCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellGUIHandler cellGUIHandler = (CellGUIHandler) cellFrontEndHandler;
+        bottomLineGUI.add(cellGUIHandler.getCellGui(), BorderLayout.CENTER);
         bottomLineGUI.setMaximumSize(bottomLineGUI.getPreferredSize());
     }
 
-    public void addBottomLineCellGUIHandler(CellFrontEndHandler cellGUIHandler) {}
-
-    public void addPiecePickerCellGUIHandler(CellGUIHandler cellGUIHandler) {
-        piecePickerGUI.add(cellGUIHandler);
-    }
-
-    public void addPiecePickerCellGUIHandler(CellFrontEndHandler cellGUIHandler) {
+    public void addPiecePickerCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellGUIHandler cellGUIHandler = (CellGUIHandler) cellFrontEndHandler;
+        piecePickerGUI.add(cellGUIHandler.getCellGui());
     }
 
     public void displayBoard() {

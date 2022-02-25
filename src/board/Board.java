@@ -3,25 +3,29 @@ package board;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import frontend.gui.*;
+import frontend.BoardFrontEndHandler;
+import frontend.CellFrontEndHandler;
+import frontend.FrontEndFactory;
 import piece.*;
 import game.*;
 
 public class Board {
     final public int numberOfLines = 6;
     final public int numberOfColumns = 6;
-    final private BoardGUIHandler guiHandler;
+    final private BoardFrontEndHandler frontEndHandler;
     final private ArrayList<ArrayList<Cell>> boardStateArray;
     final private HashSet<Cell> highlightedCells;
     final private Cell topLine;
     final private Cell bottomLine;
     final private HashSet<PiecePickerCell> piecePickerBoard;
+    final private FrontEndFactory frontEndFactory;
     private Game game;
     public Cell selectedCell;
     private Move currentMove;
     private PiecePick currentPiecePick;
 
-    public Board() {
+    public Board(int frontEndMode) {
+        frontEndFactory = new FrontEndFactory(frontEndMode);
         this.boardStateArray = new ArrayList<ArrayList<Cell>>();
         for (int i = 0; i < numberOfLines; i++) {
             ArrayList<Cell> line = new ArrayList<Cell>();
@@ -30,36 +34,36 @@ public class Board {
             }
             this.boardStateArray.add(line);
         }
-        guiHandler = new BoardGUIHandler(this);
+        frontEndHandler = frontEndFactory.createBoardFrontEndHandler(this);
         highlightedCells = new HashSet<Cell>();
         
         for (int i = numberOfLines - 1; i >= 0; i--) {
             ArrayList<Cell> line = this.boardStateArray.get(i);
             for (int j = 0; j < numberOfColumns; j++) {
                 Cell cell = new Cell(i, j, this);
-                CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
-                this.guiHandler.addCellGUIHandler(cellGUIHandler);
+                CellFrontEndHandler cellFrontEndHandler = cell.getCellFrontEndHandler();
+                this.frontEndHandler.addCellFrontEndHandler(cellFrontEndHandler);
                 line.set(j, cell);
             }
         }
         {
             Cell cell = new GoalCell(this.numberOfLines, -1, this);
-            CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
-            this.guiHandler.addTopLineCellGUIHandler(cellGUIHandler);
+            CellFrontEndHandler cellFrontEndHandler = cell.getCellFrontEndHandler();
+            this.frontEndHandler.addTopLineCellFrontEndHandler(cellFrontEndHandler);
             this.topLine = cell;
         }
         {
             Cell cell = new GoalCell(-1, -1, this);
-            CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
-            this.guiHandler.addBottomLineCellGUIHandler(cellGUIHandler);
+            CellFrontEndHandler cellFrontEndHandler = cell.getCellFrontEndHandler();
+            this.frontEndHandler.addBottomLineCellFrontEndHandler(cellFrontEndHandler);
             this.bottomLine = cell;
         }
         piecePickerBoard = new HashSet<PiecePickerCell>();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
         for (int i = 0; i < 3; i++) {
             PiecePickerCell cell = new PiecePickerCell(i, this.numberOfColumns, this);
-            CellGUIHandler cellGUIHandler = cell.getCellGUIHandler();
-            this.guiHandler.addPiecePickerCellGUIHandler(cellGUIHandler);
+            CellFrontEndHandler cellFrontEndHandler = cell.getCellFrontEndHandler();
+            this.frontEndHandler.addPiecePickerCellFrontEndHandler(cellFrontEndHandler);
             Piece piece = Piece.createNewWithNumber(i + 1);
             cell.setPieceOnTop(piece);
             piecePickerBoard.add(cell);
@@ -68,6 +72,10 @@ public class Board {
         game = new Game(this);
         currentPiecePick = new PiecePick(game);
         highlightCells(cellsToHighlight);
+    }
+
+    public FrontEndFactory getFrontEndFactory() {
+        return frontEndFactory;
     }
 
     public void highlightCellsToPickPieces() {
@@ -136,7 +144,7 @@ public class Board {
         clearHighlightedCells();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
         if (this.game.getState() == Game.gameStarted) {
-            this.guiHandler.hidePiecePicker();
+            this.frontEndHandler.hidePiecePicker();
             startNewMove(null);
         }
         else {
@@ -227,14 +235,14 @@ public class Board {
         }
         currentMove.setEndCell(endCell);
         game.endGame();
-        guiHandler.showEndGameMessage(winnerIsPlayer1);
+        frontEndHandler.showEndGameMessage(winnerIsPlayer1);
         restartGame();
     }
 
     private void restartGame() {
         clearHighlightedCells();
         clearBoard();
-        guiHandler.displayPiecePicker();
+        frontEndHandler.displayPiecePicker();
         HashSet<Cell> cellsToHighlight = new HashSet<Cell>();
         for (Cell cell : piecePickerBoard) {
             cellsToHighlight.add(cell);
@@ -278,6 +286,6 @@ public class Board {
     }
 
     public void displayBoard() {
-        guiHandler.displayBoard();
+        frontEndHandler.displayBoard();
     }
 }

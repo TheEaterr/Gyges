@@ -19,31 +19,29 @@ public class BoardCmdHandler extends BoardFrontEndHandler{
         piecePickerBoard = new ArrayList<CellCmdHandler>();
     }
 
-    public void addCellGUIHandler(CellCmdHandler CellCmdHandler) {
-        mainBoard.add(CellCmdHandler);
+    public void addCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellCmdHandler cellCmdHandler = (CellCmdHandler) cellFrontEndHandler;
+        mainBoard.add(cellCmdHandler);
     }
 
-    public void addCellGUIHandler(CellFrontEndHandler CellCmdHandler) {}
-
-    public void addTopLineCellGUIHandler(CellCmdHandler cellCmdHandler) {
+    public void addTopLineCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellCmdHandler cellCmdHandler = (CellCmdHandler) cellFrontEndHandler;
         topLine = cellCmdHandler;
     }
-
-    public void addTopLineCellGUIHandler(CellFrontEndHandler CellCmdHandler) {}
-
-    public void addBottomLineCellGUIHandler(CellCmdHandler cellCmdHandler) {
+    
+    public void addBottomLineCellFrontEndHandler(CellFrontEndHandler cellFrontEndHandler) {
+        CellCmdHandler cellCmdHandler = (CellCmdHandler) cellFrontEndHandler;
         bottomLine = cellCmdHandler;
     }
-    
-    public void addBottomLineCellGUIHandler(CellFrontEndHandler CellCmdHandler) {}
 
     public void addPiecePickerCellGUIHandler(CellCmdHandler cellCmdHandler) {
         piecePickerBoard.add(cellCmdHandler);
     }
 
-    public void addPiecePickerCellGUIHandler(CellFrontEndHandler CellCmdHandler) {}
+    public void addPiecePickerCellFrontEndHandler(CellFrontEndHandler CellCmdHandler) {}
 
     public void displayBoard() {
+        System.out.println("Game Started");
     }
 
     public void displayPiecePicker() {
